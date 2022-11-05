@@ -6,13 +6,6 @@
 //    list_of_results functions.
 // Execute `rustlings hint iterators3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
-#[derive(Debug, PartialEq, Eq)]
-pub enum DivisionError {
-    NotDivisible(NotDivisibleError),
-    DivideByZero,
-}
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct NotDivisibleError {
@@ -20,24 +13,69 @@ pub struct NotDivisibleError {
     divisor: i32,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+pub enum DivisionError {
+    NotDivisible(NotDivisibleError),
+    DivideByZero,
+}
+
 // Calculate `a` divided by `b` if `a` is evenly divisible by `b`.
 // Otherwise, return a suitable error.
 pub fn divide(a: i32, b: i32) -> Result<i32, DivisionError> {
-    todo!();
+    if b == 0 {
+        return Err(DivisionError::DivideByZero)
+    }
+    if a % b == 0 {
+        Ok(a / b)
+    } else {
+        Err(DivisionError::NotDivisible(NotDivisibleError{dividend: a, divisor: b}))
+    }
 }
 
 // Complete the function and return a value of the correct type so the test passes.
 // Desired output: Ok([1, 11, 1426, 3])
-fn result_with_list() -> () {
+fn result_with_list() -> Result<Vec<i32>, Vec<DivisionError>> {
     let numbers = vec![27, 297, 38502, 81];
-    let division_results = numbers.into_iter().map(|n| divide(n, 27));
+    let mut ok_list:Vec<i32> = vec![];
+    let mut err_list:Vec<DivisionError> = vec![];
+    for num in numbers {
+        match divide(num, 27) {
+            Ok(result) => {
+                ok_list.push(result);
+            },
+            Err(err) => {
+                err_list.push(err);
+            }
+        }
+    }
+    // let division_results = numbers.into_iter().map(|n| {
+    //     match divide(n, 27) {
+    //         Ok(result) => {
+    //             result
+    //         },
+    //         Err(err) => {
+    //             err
+    //         }
+    //     }
+    // });
+    //division_results
+    if err_list.len() > 0 {
+        Err(err_list)
+    } else {
+        Ok(ok_list)
+    }
+
 }
 
 // Complete the function and return a value of the correct type so the test passes.
 // Desired output: [Ok(1), Ok(11), Ok(1426), Ok(3)]
-fn list_of_results() -> () {
+fn list_of_results() -> Vec<Result<i32, DivisionError>> {
     let numbers = vec![27, 297, 38502, 81];
-    let division_results = numbers.into_iter().map(|n| divide(n, 27));
+    let mut division_results:Vec<Result<i32, DivisionError>> = numbers.into_iter().map(|n|{
+        divide(n, 27)
+    }).collect();
+
+    division_results
 }
 
 #[cfg(test)]
