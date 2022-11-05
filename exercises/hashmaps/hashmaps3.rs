@@ -14,32 +14,61 @@
 
 // Execute `rustlings hint hashmaps3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 use std::collections::HashMap;
 
 // A structure to store team name and its goal details.
 struct Team {
     name: String,
+    // 总进球数
     goals_scored: u8,
+    // 总的失球数
     goals_conceded: u8,
 }
 
+// build_scores_table 创建成绩表
 fn build_scores_table(results: String) -> HashMap<String, Team> {
     // The name of the team is the key and its associated struct is the value.
     let mut scores: HashMap<String, Team> = HashMap::new();
 
+    // line: England,France,4,2 ----> England 进了两个球，得了四分
     for r in results.lines() {
         let v: Vec<&str> = r.split(',').collect();
+
+        // String 类型，注意所有权
         let team_1_name = v[0].to_string();
         let team_1_score: u8 = v[2].parse().unwrap();
         let team_2_name = v[1].to_string();
         let team_2_score: u8 = v[3].parse().unwrap();
-        // TODO: Populate the scores table with details extracted from the
-        // current line. Keep in mind that goals scored by team_1
-        // will be number of goals conceded from team_2, and similarly
-        // goals scored by team_2 will be the number of goals conceded by
-        // team_1.
+
+
+        // 存在就更新值
+        if let Some(team) = scores.get_mut(&team_1_name) {
+            team.goals_scored += team_1_score;
+            team.goals_conceded += team_2_score;
+        } else {
+            let team = Team {
+                name: team_1_name.clone(),
+                goals_scored: team_1_score,
+                goals_conceded: team_2_score,
+            };
+            scores.insert(team_1_name.clone(), team);
+        }
+
+        // 存在就更新值
+        if let Some(team) = scores.get_mut(&team_2_name) {
+            team.goals_scored += team_2_score;
+            team.goals_conceded += team_1_score;
+        } else {
+            // 不存在插入
+            let team = Team {
+                name: team_2_name.clone(),
+                goals_scored: team_2_score,
+                goals_conceded: team_1_score,
+            };
+            scores.insert(team_2_name.clone(), team);
+        }
+
+
     }
     scores
 }
