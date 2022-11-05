@@ -4,12 +4,16 @@
 // Make me compile and pass the test!
 // Execute `rustlings hint vecs1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
+// 返回一个数组和vec
 fn array_and_vec() -> ([i32; 4], Vec<i32>) {
     let a = [10, 20, 30, 40]; // a plain array
-    let v = // TODO: declare your vector here with the macro for vectors
-
+    //let v = vec![10, 20, 30, 40];
+    // or
+    let mut v = Vec::new();
+    v.push(10);
+    v.push(20);
+    v.push(30);
+    v.push(40);
     (a, v)
 }
 
@@ -19,7 +23,11 @@ mod tests {
 
     #[test]
     fn test_array_and_vec_similarity() {
+
+        // 创建一个数组和一个vec
         let (a, v) = array_and_vec();
+
+
         assert_eq!(a, v[..]);
     }
 }
