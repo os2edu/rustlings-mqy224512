@@ -10,10 +10,10 @@
 //
 // Make the code compile and the tests pass.
 
-// I AM NOT DONE
 
 use std::collections::HashMap;
 
+// map, key:练习名称，value:进度
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Progress {
     None,
@@ -21,6 +21,8 @@ enum Progress {
     Complete,
 }
 
+
+/// 判断hash中指定value的数量
 fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
     let mut count = 0;
     for val in map.values() {
@@ -31,12 +33,21 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
     count
 }
 
+
+/// 使用迭代器累加
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
-    // map is a hashmap with String keys and Progress values.
-    // map = { "variables1": Complete, "from_str": None, ... }
-    todo!();
+    let mut count = 0;
+    for (_, val) in map.iter() {
+        if *val == value {
+            count += 1
+        }
+    }
+    count
+    // map.iter().filter(|(_, val)| *val == value).map(|(_, val)| val).sum()
 }
 
+
+///
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
     let mut count = 0;
     for map in collection {
@@ -50,10 +61,15 @@ fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progres
 }
 
 fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
-    // collection is a slice of hashmaps.
-    // collection = [{ "variables1": Complete, "from_str": None, ... },
-    //     { "variables2": Complete, ... }, ... ]
-    todo!();
+   let mut count = 0;
+    for map in collection.iter() {
+        for (_, val) in map.iter() {
+            if *val == value {
+                count += 1
+            }
+        }
+    }
+    count
 }
 
 #[cfg(test)]

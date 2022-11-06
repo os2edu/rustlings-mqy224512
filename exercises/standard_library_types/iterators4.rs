@@ -1,7 +1,6 @@
 // iterators4.rs
 // Execute `rustlings hint iterators4` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
 pub fn factorial(num: u64) -> u64 {
     // Complete this function to return the factorial of num
@@ -13,6 +12,21 @@ pub fn factorial(num: u64) -> u64 {
     // For an extra challenge, don't use:
     // - recursion
     // Execute `rustlings hint iterators4` for hints.
+
+    // 递归
+    // match num {
+    //     0 => 1,
+    //     1 => 1,
+    //     _ => factorial(num-1) * num
+    // }
+
+    // 构造一个vector,
+    // let v:Vec<u64> = (1..num+1).collect();
+    // v.iter().product()
+
+    // product: 将所有元素相乘
+  s (1..num+1).product()
+
 }
 
 #[cfg(test)]
