@@ -25,7 +25,7 @@ pub fn factorial(num: u64) -> u64 {
     // v.iter().product()
 
     // product: 将所有元素相乘
-  s (1..num+1).product()
+   (1..num+1).product()
 
 }
 
