@@ -23,7 +23,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
@@ -34,10 +33,40 @@ enum IntoColorError {
 // but the slice implementation needs to check the slice length!
 // Also note that correct RGB color values must be integers in the 0..=255 range.
 
+//你的任务是完成这个实现
+//返回内部类型为Color的Ok结果。
+//你需要为三个整数的元组创建一个实现，
+//一个包含三个整数的数组和一个整数切片。
+//注意元组和数组的实现将在编译时被检查，
+//但是片实现需要检查片的长度!
+//请注意，正确的RGB颜色值必须是整数0..= 255。
+
+
+fn check_num_is_u8(n: i16) -> bool {
+    n >= 0 && n <= 255
+}
+
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        if !check_num_is_u8(tuple.0) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !check_num_is_u8(tuple.1) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !check_num_is_u8(tuple.2) {
+            return Err(IntoColorError::IntConversion);
+        }
+
+        Ok(
+            Color {
+                red: tuple.0 as u8,
+                green: tuple.1 as u8,
+                blue: tuple.2 as u8,
+            }
+        )
     }
 }
 
@@ -45,6 +74,24 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+
+        if !check_num_is_u8(arr[0]) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !check_num_is_u8(arr[1]) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !check_num_is_u8(arr[2]) {
+            return Err(IntoColorError::IntConversion);
+        }
+
+        Ok(
+            Color {
+                red: arr[0] as u8,
+                green: arr[1] as u8,
+                blue: arr[2] as u8,
+            }
+        )
     }
 }
 
@@ -52,6 +99,27 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+
+        if !check_num_is_u8(slice[0]) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !check_num_is_u8(slice[1]) {
+            return Err(IntoColorError::IntConversion);
+        }
+        if !check_num_is_u8(slice[2]) {
+            return Err(IntoColorError::IntConversion);
+        }
+
+        Ok(
+            Color {
+                red: slice[0] as u8,
+                green: slice[1] as u8,
+                blue: slice[2] as u8,
+            }
+        )
     }
 }
 

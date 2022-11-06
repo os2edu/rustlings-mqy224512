@@ -3,6 +3,7 @@
 // You can read more about it at https://doc.rust-lang.org/std/convert/trait.From.html
 // Execute `rustlings hint from_into` or use the `hint` watch subcommand for a hint.
 
+use std::num::ParseIntError;
 #[derive(Debug)]
 struct Person {
     name: String,
@@ -35,10 +36,46 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
+// 步骤：
+// 1.如果提供的字符串长度为0，则返回Person的默认值
+// 2. 用逗号分割给定的字符串
+// 3. 从拆分操作中提取第一个元素，并将其用作名称
+// 4. 如果name为空，则返回Person的默认值
+// 5. 从拆分操作中提取另一个元素，并将其解析为一个`usize`作为年龄
+// 如果在解析年龄的时候出现问题，则返回 Person 的默认值
+// 否则，返回一个实例化的 Person 对象和结果
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.len() == 0 {
+            return Person::default()
+        } else {
+            let person_fileds: Vec<&str> = s.split(",").collect();
+
+            if person_fileds.len() != 2 {
+                return Person::default();
+            }
+
+            let name = person_fileds[0];
+            if name.len() == 0 {
+                return Person::default();
+            }
+
+            let age_str = person_fileds[1];
+            let age_parse_option: Result<usize, ParseIntError> = age_str.parse::<usize>();
+            match age_parse_option {
+                Ok(age) => {
+                    Person {
+                        name: name.to_string(),
+                        age,
+                    }
+                },
+                Err(_) => {
+                    Person::default()
+                }
+            }
+
+        }
     }
 }
 
