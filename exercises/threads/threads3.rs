@@ -1,7 +1,6 @@
 // threads3.rs
 // Execute `rustlings hint threads3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
 use std::sync::mpsc;
 use std::sync::Arc;
@@ -24,11 +23,14 @@ impl Queue {
     }
 }
 
+// 传递消息，发送者
+// 需要使用多发送者
 fn send_tx(q: Queue, tx: mpsc::Sender<u32>) -> () {
     let qc = Arc::new(q);
     let qc1 = Arc::clone(&qc);
     let qc2 = Arc::clone(&qc);
-
+    let tx2 = tx.clone();
+    // 发送前半部分消息
     thread::spawn(move || {
         for val in &qc1.first_half {
             println!("sending {:?}", val);
@@ -37,20 +39,28 @@ fn send_tx(q: Queue, tx: mpsc::Sender<u32>) -> () {
         }
     });
 
+    // 发送后半部分消息
     thread::spawn(move || {
         for val in &qc2.second_half {
             println!("sending {:?}", val);
-            tx.send(*val).unwrap();
+            tx2.send(*val).unwrap();
             thread::sleep(Duration::from_secs(1));
         }
     });
 }
 
 fn main() {
+
+    // 创建channel
+    // tx: 发送者
+    // rx: 接受者
     let (tx, rx) = mpsc::channel();
+
+    // 创建一个队列
     let queue = Queue::new();
     let queue_length = queue.length;
 
+    // 消息发送
     send_tx(queue, tx);
 
     let mut total_received: u32 = 0;
